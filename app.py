@@ -16,3 +16,6 @@ def journals():
 @app.route("/new")
 def newJournal():
     return render_template("NewJournal.html")
+
+if __name__ == "__main__":
+    app.run()
