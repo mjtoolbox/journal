@@ -41,9 +41,91 @@
         </ul>
       </div>
     </nav>
-    <div class="container">
-      <h1>New Journal Entry</h1>
-      <h4>Form goes below with buttons</h4>
+    <div class="container" style="padding-left: 200px; padding-right: 200px">
+      <h1 style="padding-top: 30px; padding-bottom: 40px">New Journal Entry</h1>
+      <form method="POST" action="{{url_for('addJournal')}}">
+        <div class="row">
+          <div class="col-sm-1">
+            <label>Date:</label>
+          </div>
+          <div class="col-sm-4">
+            <input
+              type="text"
+              id="date"
+              name="date"
+              placeholder="Enter date"
+              class="form-control form-control-sm"
+            />
+          </div>
+          <div class="col-sm-1">
+            <label>Title:</label>
+          </div>
+          <div class="col-sm-6">
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="What's your title?"
+              class="form-control form-control-sm"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1">
+            <label>Author:</label>
+          </div>
+          <div class="col-sm-3">
+            <input
+              type="text"
+              id="author"
+              name="author"
+              placeholder="Your name here"
+              class="form-control form-control-sm"
+            />
+          </div>
+          <div class="col-sm-1">
+            <label>Tag:</label>
+          </div>
+          <div class="col-sm-3">
+            <input
+              type="text"
+              id="tag"
+              name="tag"
+              placeholder="Enter tag"
+              class="form-control form-control-sm"
+            />
+          </div>
+          <div class="col-sm-1">
+            <label>Emotion:</label>
+          </div>
+          <div class="col-sm-3">
+            <select name="emotion" class="form-control form-control-sm">
+              <option selected>Select emotion</option>
+              <option value="Happy">Happy</option>
+              <option value="Energized">Energized</option>
+              <option value="Confident">Confident</option>
+              <option value="Calm">Calm</option>
+              <option value="Normal">Normal</option>
+              <option value="Bored">Bored</option>
+              <option value="Tired">Tired</option>
+              <option value="Anxious">Anxious</option>
+              <option value="Sad">Sad</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <label>Entry:</label>
+            <textarea
+              class="form-control form-control-sm"
+              rows="20"
+              id="content"
+              name="content"
+            ></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Save</button>
+      </form>
     </div>
   </body>
 </html>
