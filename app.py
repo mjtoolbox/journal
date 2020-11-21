@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect
-import sqlite3
-from sqlite3 import Error
+# import sqlite3
+# from sqlite3 import Error
+import psycopg2
 import sys
-from db import dbconnection
+from postgresdb import dbconnection
 
 app = Flask(__name__)
 
@@ -37,13 +38,13 @@ def addJournal():
 
         con = dbconnection()
         cur = con.cursor()
-        cur.execute("INSERT INTO Journal (title, date, author, tag, emotion, content) VALUES (?,?,?,?,?,?); ",
+        cur.execute("INSERT INTO Journal (title, date, author, tag, emotion, content) VALUES (%s,%s,%s,%s,%s,%s); ",
                     (title, date, author, tag, emotion, content))
 
         con.commit()
         msg = "Journal successfully saved"
         return redirect("/journals")
-    except Error as e:
+    except Exception as e:
         print("Hey there is an error: " + e)
         msg = e
     finally:
@@ -57,7 +58,7 @@ def editJournal(id):
     try:
         con = dbconnection()
         cur = con.cursor()
-        cur.execute("select * from Journal where id = ?", (str(id),))
+        cur.execute("select * from Journal where id = %s", (str(id),))
         row = cur.fetchone()
         print("Edit")
         print(row)
@@ -65,7 +66,7 @@ def editJournal(id):
             return render_template("editJournal.html", aJournal=row)
         else:
             msg = "Cannot find the journal with this id"
-    except Error as e:
+    except Exception as e:
         print("There is an error", e)
         msg = e
     finally:
@@ -87,12 +88,12 @@ def updateJournal():
 
         con = dbconnection()
         cur = con.cursor()
-        cur.execute("UPDATE Journal SET title = ?, date = ?, content = ?, emotion = ?, tag = ? WHERE id = ?",
+        cur.execute("UPDATE Journal SET title = %s, date = %s, content = %s, emotion = %s, tag = %s WHERE id = %s",
                     (title, date, content, emotion, tag, _id))
         con.commit()
         msg = "Journal successfully updated!"
         return redirect("/journals")
-    except Error as e:
+    except Exception as e:
         print("Error " + e)
         con.rollback()
         msg = "There is an error, rollback the change."
@@ -107,12 +108,12 @@ def deleteJournal(id):
     try:
         con = dbconnection()
         cur = con.cursor()
-        cur.execute("delete from Journal where id = ?", (str(id),))
+        cur.execute("delete from Journal where id = %s", (str(id),))
         con.commit()
         msg = "Journal deleted successfully!"
         # return render_template("result.html", msg=msg)
         return redirect("/journals")
-    except Error as e:
+    except Exception as e:
         print("Error " + e)
         con.rollback()
         msg = "There is an error while deleting."
@@ -148,7 +149,7 @@ def viewJournal():
 
 def findAllJournals():
     con = dbconnection()
-    con.row_factory = sqlite3.Row
+    # con.row_factory = sqlite3.Row
     cur = con.cursor()
     cur.execute("SELECT * FROM Journal")
     rows = cur.fetchall()

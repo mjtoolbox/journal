@@ -59,21 +59,18 @@
         <tbody>
           {% for j in journals %}
           <tr>
-            <td>{{j["date"]}}</td>
-            <td>{{j["title"]}}</td>
-            <td>{{j["content"]}}</td>
-            <td>{{j["author"]}}</td>
-            <td>{{j["emotion"]}}</td>
-            <td>{{j["tag"]}}</td>
+            <td>{{j[2]}}</td>
+            <td>{{j[1]}}</td>
+            <td>{{j[3]}}</td>
+            <td>{{j[4]}}</td>
+            <td>{{j[5]}}</td>
+            <td>{{j[6]}}</td>
             <td>
-              <a
-                href="/edit/{{j['id']}}"
-                class="btn btn-info btn-sm"
-                role="button"
+              <a href="/edit/{{j[0]}}" class="btn btn-info btn-sm" role="button"
                 >Edit</a
               >
               <a
-                href="/delete/{{j['id']}}"
+                href="/delete/{{j[0]}}"
                 class="btn btn-danger btn-sm"
                 rol="button"
                 >Delete</a
