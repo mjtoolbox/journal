@@ -15,7 +15,11 @@ def home():
 
 @app.route("/journals")
 def journals():
-    rows = findAllJournals()
+    con = dbconnection()
+    # con.row_factory = sqlite3.Row
+    cur = con.cursor()
+    cur.execute("SELECT * FROM Journal")
+    rows = cur.fetchall()
     return render_template("journals.html", journals=rows)
 
 
