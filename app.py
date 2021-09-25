@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect
+from flask_simplelogin import SimpleLogin
+from flask_simplelogin import login_required
 # import sqlite3
 # from sqlite3 import Error
 import psycopg2
@@ -23,6 +25,7 @@ def journals():
     return render_template("journals.html", journals=rows)
 
 
+@login_required
 @app.route("/new")
 def newJournal():
     return render_template("newJournal.html")
