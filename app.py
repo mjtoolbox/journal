@@ -86,7 +86,7 @@ def signup():
 
     if user:
         flash("Email address already exists")
-        return redirect(url_for('/signup'))
+        return redirect(url_for('signup'))
 
     con = dbconnection()
     cur = con.cursor()
@@ -101,7 +101,7 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('welcome'))
+    return redirect('/')
 
 
 @app.route('/profile')
@@ -112,6 +112,7 @@ def profile():
 
 
 @app.route("/journals")
+@login_required
 def journals():
     con = dbconnection()
     cur = con.cursor()
@@ -121,11 +122,13 @@ def journals():
 
 
 @app.route("/new")
+@login_required
 def newJournal():
     return render_template("newJournal.html")
 
 
 @app.route("/addJournal", methods=['POST'])
+@login_required
 def addJournal():
     msg = ""
     try:
@@ -155,6 +158,7 @@ def addJournal():
 
 
 @app.route("/edit/<int:id>")
+@login_required
 def editJournal(id):
     try:
         con = dbconnection()
@@ -176,6 +180,7 @@ def editJournal(id):
 
 
 @ app.route("/update", methods=["POST"])
+@login_required
 def updateJournal():
     msg = ""
     try:
@@ -204,6 +209,7 @@ def updateJournal():
 
 
 @app.route("/delete/<int:id>")
+@login_required
 def deleteJournal(id):
     msg = ""
     try:
@@ -242,6 +248,7 @@ def deleteJournal(id):
 
 
 @ app.route("/view")
+@login_required
 def viewJournal():
     return render_template("viewJournal.html")
 

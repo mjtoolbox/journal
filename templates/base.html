@@ -29,18 +29,28 @@
       <!-- Navbar links -->
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
+          {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="/journals">View List</a>
+            <a class="nav-link" href="{{url_for('journals')}}">View List</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/new">New Journal</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">Profile</a>
+          </li>
+          {% endif %} {% if not current_user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('login')}}">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('signup')}}">Sign Up</a>
           </li>
+          {% endif %} {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
