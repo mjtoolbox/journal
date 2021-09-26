@@ -39,6 +39,7 @@ def load_user(user_id):
         # cur = con.cursor()
         # cur.execute("select * from users where id = %s", (str(user_id),))
         # row = cur.fetchone()
+        # return User(row[0], row[1], row[2], row[3], row[4])
         print("load_user " + str(user_id))
         user = findUserByEmail(user_id)
         return user
@@ -71,6 +72,8 @@ def login():
         flash('Please check your login details and try again')
         return redirect(url_for('login'))
 
+    print("login print user")
+    print(user)
     login_user(user, remember=remember)
     return redirect(url_for('profile'))
 
