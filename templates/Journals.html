@@ -1,85 +1,39 @@
-<!DOCTYPE html>
-<html lang="EN">
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <title></title>
-    <link rel="stylesheet" href="" />
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-      <!-- Brand -->
-      <a class="navbar-brand" href="/">Journal</a>
+{% extends "base.html" %} {% block content %}
 
-      <!-- Toggler/collapsibe Button -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#collapsibleNavbar"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Navbar links -->
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/journals">View List</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/new">New Journal</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div class="container">
-      <h1>List of Journals</h1>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Title</th>
-            <th style="width: 30%">Content</th>
-            <th>Author</th>
-            <th>Emotion</th>
-            <th>Tag</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for j in journals %}
-          <tr>
-            <td>{{j[2]}}</td>
-            <td>{{j[1]}}</td>
-            <td>{{j[3]}}</td>
-            <td>{{j[4]}}</td>
-            <td>{{j[5]}}</td>
-            <td>{{j[6]}}</td>
-            <td>
-              <a href="/edit/{{j[0]}}" class="btn btn-info btn-sm" role="button"
-                >Edit</a
-              >
-              <a
-                href="/delete/{{j[0]}}"
-                class="btn btn-danger btn-sm"
-                rol="button"
-                >Delete</a
-              >
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </body>
-</html>
+<div class="container">
+  <h1>List of Journals</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Title</th>
+        <th style="width: 30%">Content</th>
+        <th>Author</th>
+        <th>Emotion</th>
+        <th>Tag</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for j in journals %}
+      <tr>
+        <td>{{j[2]}}</td>
+        <td>{{j[1]}}</td>
+        <td>{{j[3]}}</td>
+        <td>{{j[4]}}</td>
+        <td>{{j[5]}}</td>
+        <td>{{j[6]}}</td>
+        <td>
+          <a href="/edit/{{j[0]}}" class="btn btn-info btn-sm" role="button"
+            >Edit</a
+          >
+          <a href="/delete/{{j[0]}}" class="btn btn-danger btn-sm" rol="button"
+            >Delete</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock%}
