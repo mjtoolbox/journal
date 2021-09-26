@@ -1,18 +1,121 @@
-from flask import Flask, render_template, request, redirect
-from flask_simplelogin import SimpleLogin
-from flask_simplelogin import login_required
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import login_manager, login_user, login_required, logout_user, current_user, LoginManager
 # import sqlite3
 # from sqlite3 import Error
 import psycopg2
 import sys
+from werkzeug.security import generate_password_hash, check_password_hash
 from postgresdb import dbconnection
+from user import User
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'mypass'
+
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+
+def findUserByEmail(email):
+    try:
+        con = dbconnection()
+        cur = con.cursor()
+        cur.execute("select * from users where email = %s", (email,))
+        row = cur.fetchone()
+        if row is None:
+            print("returning null from finduserbyemail")
+            return None
+        else:
+            user = User(row[0], row[1], row[2], row[3], row[4])
+            return user
+    except Exception as e:
+        print("error" + e)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    try:
+        # con = dbconnection()
+        # cur = con.cursor()
+        # cur.execute("select * from users where id = %s", (str(user_id),))
+        # row = cur.fetchone()
+        print("load_user " + str(user_id))
+        user = findUserByEmail(user_id)
+        return user
+    except Exception as e:
+        print("error" + e)
 
 
 @app.route("/")
 def home():
     return render_template("welcome.html")
+
+
+@app.route("/login")
+def loginview():
+    return render_template('login.html')
+
+
+@app.route("/login", methods=['POST'])
+def login():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    remember = True if request.form.get('remember') else False
+
+    user = findUserByEmail(email)
+    # user = User(temp[0], temp[1], temp[2], temp[3], temp[4])
+
+    # print(user)
+
+    if not user or not check_password_hash(user.password, password):
+        flash('Please check your login details and try again')
+        return redirect(url_for('login'))
+
+    login_user(user, remember=remember)
+    return redirect(url_for('profile'))
+
+
+@app.route("/signup")
+def signupview():
+    return render_template('signup.html')
+
+
+@app.route("/signup", methods=['POST'])
+def signup():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    role = 'user'
+
+    print("signup: " + name + " " + email + " " + password)
+
+    user = findUserByEmail(email)
+
+    if user:
+        flash("Email address already exists")
+        return redirect(url_for('/signup'))
+
+    con = dbconnection()
+    cur = con.cursor()
+    cur.execute("INSERT INTO users (email, password, name, role) VALUES (%s,%s,%s,%s); ",
+                (email, generate_password_hash(password, method='sha256'), name, role))
+
+    con.commit()
+    return redirect(url_for('login'))
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('welcome'))
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    print("current user " + current_user.name)
+    return render_template('profile.html', name=current_user.name)
 
 
 @app.route("/journals")
@@ -25,7 +128,6 @@ def journals():
     return render_template("journals.html", journals=rows)
 
 
-@login_required
 @app.route("/new")
 def newJournal():
     return render_template("newJournal.html")
