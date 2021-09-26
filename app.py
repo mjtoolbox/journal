@@ -23,7 +23,6 @@ def findUserByEmail(email):
         cur.execute("select * from users where email = %s", (email,))
         row = cur.fetchone()
         if row is None:
-            print("returning null from finduserbyemail")
             return None
         else:
             user = User(row[0], row[1], row[2], row[3], row[4])
@@ -35,12 +34,6 @@ def findUserByEmail(email):
 @login_manager.user_loader
 def load_user(user_id):
     try:
-        # con = dbconnection()
-        # cur = con.cursor()
-        # cur.execute("select * from users where id = %s", (str(user_id),))
-        # row = cur.fetchone()
-        # return User(row[0], row[1], row[2], row[3], row[4])
-        print("load_user " + str(user_id))
         user = findUserByEmail(user_id)
         return user
     except Exception as e:
@@ -64,9 +57,6 @@ def login():
     remember = True if request.form.get('remember') else False
 
     user = findUserByEmail(email)
-    # user = User(temp[0], temp[1], temp[2], temp[3], temp[4])
-
-    # print(user)
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again')
@@ -124,7 +114,6 @@ def profile():
 @app.route("/journals")
 def journals():
     con = dbconnection()
-    # con.row_factory = sqlite3.Row
     cur = con.cursor()
     cur.execute("SELECT * FROM Journal")
     rows = cur.fetchall()
