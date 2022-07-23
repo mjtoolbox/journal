@@ -20,7 +20,7 @@ def findUserByEmail(email):
     try:
         con = dbconnection()
         cur = con.cursor()
-        cur.execute("select * from users where email = %s", (email,))
+        cur.execute("select * from authors where email = %s", (email,))
         row = cur.fetchone()
         if row is None:
             return None
@@ -90,7 +90,7 @@ def signup():
 
     con = dbconnection()
     cur = con.cursor()
-    cur.execute("INSERT INTO users (email, password, name, role) VALUES (%s,%s,%s,%s); ",
+    cur.execute("INSERT INTO authors (email, password, name, role) VALUES (%s,%s,%s,%s); ",
                 (email, generate_password_hash(password, method='sha256'), name, role))
 
     con.commit()
